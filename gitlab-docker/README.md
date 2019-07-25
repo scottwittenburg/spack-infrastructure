@@ -23,7 +23,7 @@ watch 'docker-compose ps'
    `watch`.
 
 ```
-docker-compose run --rm cdash install configure
+docker-compose -f docker-compose.yml -f docker-compose-alternate.yaml up cdash
 docker-compose up -d cdash gitlab
 watch 'docker-compose ps'
 ```
@@ -31,7 +31,7 @@ watch 'docker-compose ps'
  - wait until all services report as "up" and "healthy", then ctrl-c the
    `watch`.
 
- - browse to `localhost:8081`. (CDash instance)
+ - browse to `localhost:8081`. (CDash instance) If you get redirected to `viewProjects.php`, you can go straight to login page with `http://localhost:8081/login.php`.
  - login with name `root@docker.container` and cdash password
  - create a new project called "spack"
 
@@ -44,7 +44,7 @@ watch 'docker-compose ps'
 $EDITOR vars2 # set RUNNER_REGISTRATION_TOKEN
 source vars2
 
-docker-compose up -d rshell
+docker-compose up -d rshell rdocker
 ```
 
  - Refresh the runners browser page.  A new runner should appear in the table

@@ -23,6 +23,41 @@ services:
       - './volumes/logs:/var/log/gitlab'
       - './volumes/opt:/var/opt/gitlab'
 
+  dockerclient:
+    image: docker
+    entrypoint: ["sleep"]
+    command: ["36000"]
+    depends_on:
+      - docker
+    links:
+      - docker
+
+  docker:
+    image: 'docker:dind'
+    privileged: true
+
+  rdocker:
+    image: "gitlab/gitlab-runner"
+    volumes:
+      - "./files:/files"
+      - "./volumes/rdocker/builds:/home/gitlab-runner/builds"
+      - "./volumes/rdocker/cache:/home/gitlab-runner/cache"
+    init: true
+    entrypoint: ["bash"]
+    command: ["/files/docker-runner.bash"]
+    depends_on:
+      - docker
+    links:
+      - docker
+    environment:
+      DOCKER_HOST: 'tcp://docker:2375'
+      DOCKER_IMAGE: 'ubuntu:18.04'
+      CI_SERVER_URL: 'http://gitlab:${GITLAB_INTERNAL_WEB_PORT}'
+      REGISTRATION_TOKEN: "${RUNNER_REGISTRATION_TOKEN}"
+      RUNNER_EXECUTOR: docker
+      REGISTER_NON_INTERACTIVE: 'true'
+      RUNNER_TAG_LIST: "docker,spack-k8s"
+
   rshell:
     image: "gitlab/gitlab-runner"
     volumes:
@@ -53,10 +88,6 @@ services:
 
   cdash:
     image: "kitware/cdash:spack_deploy"
-    depends_on:
-      - mysql
-    links:
-      - mysql
     ports:
      - "${CDASH_WEB_PORT}:${CDASH_INTERNAL_WEB_PORT}"
     environment:

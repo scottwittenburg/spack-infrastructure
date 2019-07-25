@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  cdash:
+    image: "kitware/cdash:spack_deploy"
+    command: ["install", "configure"]
+    environment:
+      CDASH_ROOT_ADMIN_PASS: ${CDASH_ROOT_PASSWORD}
+
+      CDASH_CONFIG: |
+        $$CDASH_DB_HOST = 'mysql';
+        $$CDASH_DB_NAME = 'cdash';
+        $$CDASH_DB_TYPE = 'mysql';
