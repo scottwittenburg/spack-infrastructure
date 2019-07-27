@@ -52,6 +52,7 @@ services:
     environment:
       DOCKER_HOST: 'tcp://docker:2375'
       DOCKER_IMAGE: 'ubuntu:18.04'
+      DOCKER_NETWORK_MODE: host
       CI_SERVER_URL: 'http://gitlab:${GITLAB_INTERNAL_WEB_PORT}'
       REGISTRATION_TOKEN: "${RUNNER_REGISTRATION_TOKEN}"
       RUNNER_EXECUTOR: docker
