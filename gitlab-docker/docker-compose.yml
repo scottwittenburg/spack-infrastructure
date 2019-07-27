@@ -23,17 +23,17 @@ services:
       - './volumes/logs:/var/log/gitlab'
       - './volumes/opt:/var/opt/gitlab'
 
-  dockerclient:
-    image: docker
-    entrypoint: ["sleep"]
-    command: ["36000"]
-    depends_on:
-      - docker
-    links:
-      - docker
+  # dockerclient:
+  #   image: docker:18.09
+  #   entrypoint: ["sleep"]
+  #   command: ["36000"]
+  #   depends_on:
+  #     - docker
+  #   links:
+  #     - docker
 
   docker:
-    image: 'docker:dind'
+    image: 'docker:18.09-dind'
     privileged: true
 
   rdocker:
