@@ -2,26 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spackbot-spack-io
+  name: spackbotdev-spack-io
   namespace: spack
   labels:
-    app: spackbot-spack-io
+    app: spackbotdev-spack-io
     svc: web
 spec:
   selector:
     matchLabels:
-      app: spackbot-spack-io
+      app: spackbotdev-spack-io
       svc: web
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
-        app: spackbot-spack-io
+        app: spackbotdev-spack-io
         svc: web
     spec:
       containers:
       - name: web
-        image: "ghcr.io/spack/spack-bot:latest"
+        image: "ghcr.io/scottwittenburg/spackbot:0.0.60"
         imagePullPolicy: Always
         ports:
         - name: http
@@ -61,26 +61,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spackbot-workers
+  name: spackbotdev-workers
   namespace: spack
   labels:
-    app: spackbot-workers
+    app: spackbotdev-workers
     svc: workers
 spec:
   selector:
     matchLabels:
-      app: spackbot-workers
+      app: spackbotdev-workers
       svc: workers
   replicas: 1
   template:
     metadata:
       labels:
-        app: spackbot-workers
+        app: spackbotdev-workers
         svc: workers
     spec:
       containers:
       - name: worker
-        image: "ghcr.io/spack/spackbot-workers:latest"
+        image: "ghcr.io/scottwittenburg/spackbot-workers:0.0.60"
         imagePullPolicy: Always
         # Mount secrets to non-existing location
         volumeMounts:
@@ -112,3 +112,4 @@ spec:
             defaultMode: 0600
       nodeSelector:
         spack.io/node-pool: base
+
